@@ -1,0 +1,149 @@
+<html lang="fr">
+<title>PENDU</title>
+	<head>
+	<meta charset="UTF-8"/>
+<h1 class="Titre"> Christmas Hangman </h1>
+ <link href="pendu1j.css" rel="stylesheet" type="text/css"/>
+	</head>
+	<body>
+<script language="JavaScript">
+				
+				var motSecret;
+				var Num
+				var tableauMot=new Array();	// Le tableau qui contient les lettres du mot à trouver
+				var mots=new Array();		// Le tableau qui contient tous les mots possibles
+				
+				var tailleMot;				// Le nombre de lettres du mot à trouver
+				var coupsManques=1;			// Le nombre de lettres fausses essayées
+				var lettresTrouvees=0;		// Le nombre de lettres trouvées
+				var fini=false;				// true si le jeu est terminé
+				
+				mots[0]="FIR";
+				mots[1]="ELF";
+				mots[2]="SNOW";
+				mots[3]="GIFT";
+				mots[4]="SANTA";
+				mots[5]="RUDOLF";
+				mots[6]="GARLAND";
+				mots[7]="CHRISTMAS";
+				mots[8]="SNOWMAN";
+				mots[9]="DECEMBER";
+				mots[10]="SNOWFLAKE";						
+			
+				Num=Math.floor(Math.random()*mots.length);// (0à1)*taille du tableau ici 15 . on arrondie a l'entier inférieur
+				motSecret=mots[Num];
+				tailleMot=motSecret.length; 
+				
+				// Permet de changer la couleur des touches du clavier
+				function changeCouleur(element,couleur){
+					element.style.backgroundColor=couleur;
+				}
+				
+				// Gère tous les traitements à faire lorsqu'on appuie sur une touche
+				function proposer(element){
+					
+					// Si la couleur de fond est grey, c'est qu'on a déjà essayé - on quitte la fonction
+					if(element.style.backgroundColor=="grey" ||fini) return;
+					
+					// On récupère la lettre du clavier et on met la touche en grey (pour signaler qu'elle est cliquée)
+					var lettre=element.innerHTML;
+					changeCouleur(element,"grey");
+					
+					// On met la variable trouve à false;
+					var trouve=false;
+					
+					// On parcours chaque lettre du mot, on cherche si on trouve la lettre séléectionnée au clavier
+					for(var i=0; i<tailleMot; i++) {
+						
+						// Si c'est le cas :
+						if(tableauMot[i].innerHTML==lettre) {
+							tableauMot[i].style.visibility='visible';	// On affiche la lettre
+							trouve=true;
+							lettresTrouvees++;
+						}
+						
+					}
+					
+					// Si la lettre n'est pas présente, trouvé vaut toujours false :
+					if(!trouve){
+						coupsManques++; // on ajoute 1 à la variable coupsManques
+						document.images['pendu'].src="pendu/"+coupsManques+".png"; // On change l'image du pendu
+						document.images['erreur'].src="erreur/"+coupsManques+".png";
+						
+						// Si on a raté 9 fois :
+						if(coupsManques==9){ // double egal = équivalent
+							alert("Vous avez perdu !");
+							for(var i=0; i<tailleMot; i++) tableauMot[i].style.visibility='visible';
+							fini=true;
+							// on affiche le mot, on fini le jeu
+						}
+					}
+					if(lettresTrouvees==tailleMot){
+						alert("Bravo ! Vous avez découvert le mot secret !");
+						fini=true;
+						document.location.href="index.html"; 
+					}
+				}
+
+
+</script>
+
+		<table id="clavier">
+	 <tr id="ligne">
+	  <td class="letter" onclick="proposer(this);" >A</td>
+	  <td class="letter" onclick="proposer(this);" >B</td>
+	  <td class="letter" onclick="proposer(this);" >C</td>
+	  <td class="letter" onclick="proposer(this);" >D</td>
+	  <td class="letter" onclick="proposer(this);" >E</td>
+	  <td class="letter" onclick="proposer(this);" >F</td>
+	  <td class="letter" onclick="proposer(this);" >G</td>
+	  <td class="letter" onclick="proposer(this);" >H</td>
+	  <td class="letter" onclick="proposer(this);" >I</td>
+	  <td class="letter" onclick="proposer(this);" >J</td>
+	 </tr>
+	<tr id="ligne">
+	  <td class="letter" onclick="proposer(this);" >K</td>
+	  <td class="letter" onclick="proposer(this);" >L</td>
+	  <td class="letter" onclick="proposer(this);" >M</td>
+	  <td class="letter" onclick="proposer(this);" >N</td>
+	  <td class="letter" onclick="proposer(this);" >O</td>
+	  <td class="letter" onclick="proposer(this);" >P</td>
+	  <td class="letter" onclick="proposer(this);" >Q</td>
+	  <td class="letter" onclick="proposer(this);" >R</td>
+	  <td class="letter" onclick="proposer(this);" >S</td>
+	  <td class="letter" onclick="proposer(this);" >T</td>
+	 </tr>
+	<tr id="ligne">
+	  <td class="letter" onclick="proposer(this);" >U</td>
+	  <td class="letter" onclick="proposer(this);" >V</td>
+	  <td class="letter" onclick="proposer(this);" >W</td>
+	  <td class="letter" onclick="proposer(this);" >X</td>
+	  <td class="letter" onclick="proposer(this);" >Y</td>
+	  <td class="letter" onclick="proposer(this);" >Z</td>
+	 </tr>
+	</table>
+
+	<table id="mot">
+		<tr>
+			<script language="javascript">
+				for(var i=0; i<tailleMot; i++) document.write("<td> <p id=\""+i+"\">"+motSecret.charAt(i)+"</p></td>");
+			</script>
+		</tr>
+	</table>
+	<div class="cartoon">
+	<img name="pendu" class="pendu" src="pendu/1.png">
+	<img name="erreur" class="erreur" src="erreur/1.png">
+	</div>
+	
+	<input class="button" type="button" onclick='window.location.reload(false)' value="Nouvelle partie"/>
+	
+	<script language="javascript">
+		for(var i=0; i<tailleMot; i++) tableauMot[i]=document.getElementById(i);
+	</script>
+	<form action="Menu/Menu.html"  onSubmit= "proposer(element)">
+	</body>
+	</html>
+
+	
+						
+	
